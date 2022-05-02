@@ -7,6 +7,7 @@ import java.io.InputStream;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -15,8 +16,8 @@ import javafx.scene.layout.HBox;
 public class MenuView extends BorderPane{
 
 	private ImageView logoView;
-	private HBox hbox;
 	private Button startButton;
+	private HBox hbox;
 	private static final String LOGO_PATH = "logo.png";
 	
 	public MenuView() {
@@ -28,7 +29,6 @@ public class MenuView extends BorderPane{
 			e.printStackTrace();
 		}
 		configureHBox();
-		startButton = new Button("Start");
 		setCenter(logoView);
 		setBottom(hbox);
 	}
@@ -47,16 +47,15 @@ public class MenuView extends BorderPane{
 		return view;
 	}
 	
-	private Button configureButton(String text) {
-		Button button = new Button(text);
-		return button;
+	private void configureButton() {
+		startButton = new Button("Start");
 	}
 	
 	private void configureHBox() {
 		hbox = new HBox();
-		startButton = configureButton("Start");
-		hbox.getChildren().add(startButton);
+		hbox.setPadding(new Insets(20,0,20,0));
 		hbox.setAlignment(Pos.CENTER);
-		hbox.setPadding(new Insets(20, 0, 20, 0));
+		configureButton();
+		hbox.getChildren().add(startButton);
 	}
 }
