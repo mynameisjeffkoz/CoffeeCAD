@@ -15,6 +15,8 @@ public class ApplicationView extends BorderPane {
 
 	private MenuBar menuBar;
 	private HashMap<String, MenuItem> menuMap;
+	private CurveMakerView curvView;
+	private SurfaceMakerView surfView;
 	public static final String MENU_ITEM_OPEN = "MENU_ITEM_OPEN";
 	public static final String MENU_ITEM_SAVE = "MENU_ITEM_SAVE";
 	public static final String MENU_ITEM_EXIT = "MENU_ITEM_EXIT";
@@ -27,6 +29,7 @@ public class ApplicationView extends BorderPane {
 		configureMenuBar();
 		setTop(menuBar);
 		setCenter(new Button("Button!"));
+		initViews();
 	}
 	
 	private void configureMenuBar() {
@@ -63,9 +66,27 @@ public class ApplicationView extends BorderPane {
 		Menu menu = new Menu("_View");
 		MenuItem curve = new MenuItem("_Curve");
 		MenuItem surface = new MenuItem("_Surface");
+		//TODO: Configure behavior of menu items
+		curve.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				setCenter(curvView);
+			}
+		});
+		surface.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				setCenter(surfView);
+			}
+		});
 		menu.getItems().addAll(curve, surface);
 		menuMap.put(MENU_ITEM_CURV, curve);
 		menuMap.put(MENU_ITEM_SURF, surface);
 		return menu;
+	}
+	
+	private void initViews() {
+		curvView = new CurveMakerView();
+		surfView = new SurfaceMakerView();
 	}
 }
