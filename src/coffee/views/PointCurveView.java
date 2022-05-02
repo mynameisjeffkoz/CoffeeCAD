@@ -22,7 +22,6 @@ public class PointCurveView extends GridPane {
 
 	public void initGrid() {
 		setAlignment(Pos.CENTER);
-		setAlignment(Pos.CENTER);
 		setPadding(new Insets(20, 0, 20, 0));
 		setVgap(10);
 		setHgap(30);
