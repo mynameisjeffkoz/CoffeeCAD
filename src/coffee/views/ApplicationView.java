@@ -17,26 +17,31 @@ public class ApplicationView extends BorderPane {
 	private HashMap<String, MenuItem> menuMap;
 	private CurveMakerView curvView;
 	private SurfaceMakerView surfView;
+	private PlotCurveView plotCurvView;
+	private PlotSurfaceView plotSurfView;
 	public static final String MENU_ITEM_OPEN = "MENU_ITEM_OPEN";
 	public static final String MENU_ITEM_SAVE = "MENU_ITEM_SAVE";
 	public static final String MENU_ITEM_EXIT = "MENU_ITEM_EXIT";
 	public static final String MENU_ITEM_CURV = "MENU_ITEM_CURV";
 	public static final String MENU_ITEM_SURF = "MENU_ITEM_SURF";
+	public static final String MENU_ITEM_PLOTC = "MENU_ITEM_PLOTC";
+	public static final String MENU_ITEM_PLOTS = "MENU_ITEM_PLOTS";
 	
 	
 	public ApplicationView() {
 		super();
 		configureMenuBar();
 		setTop(menuBar);
-		setCenter(new Button("Button!"));
 		initViews();
+		setCenter(curvView);
 	}
 	
 	private void configureMenuBar() {
 		menuMap = new HashMap<String,MenuItem>();
 		Menu fileMenu = createFileMenu();
-		Menu viewMenu = createViewMenu();
-		menuBar = new MenuBar(fileMenu, viewMenu);
+		Menu makeMenu = createMakeMenu();
+		Menu plotMenu = createPlotMenu();
+		menuBar = new MenuBar(fileMenu, makeMenu, plotMenu);
 	}
 	
 	public MenuItem getMenuItem(String name) {
@@ -62,11 +67,10 @@ public class ApplicationView extends BorderPane {
 		return menu;
 	}
 	
-	private Menu createViewMenu() {
-		Menu menu = new Menu("_View");
+	private Menu createMakeMenu() {
+		Menu menu = new Menu("_Make");
 		MenuItem curve = new MenuItem("_Curve");
 		MenuItem surface = new MenuItem("_Surface");
-		//TODO: Configure behavior of menu items
 		curve.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -85,8 +89,32 @@ public class ApplicationView extends BorderPane {
 		return menu;
 	}
 	
+	private Menu createPlotMenu() {
+		Menu menu = new Menu("_Plot");
+		MenuItem plotCurve = new MenuItem("_Curve");
+		MenuItem plotSurface = new MenuItem("_Surface");
+		plotCurve.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				setCenter(plotCurvView);
+			}
+		});
+		plotSurface.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				setCenter(plotSurfView);
+			}
+		});
+		menu.getItems().addAll(plotCurve, plotSurface);
+		menuMap.put(MENU_ITEM_PLOTC, plotCurve);
+		menuMap.put(MENU_ITEM_PLOTS, plotSurface);
+		return menu;
+	}
+	
 	private void initViews() {
 		curvView = new CurveMakerView();
 		surfView = new SurfaceMakerView();
+		plotCurvView = new PlotCurveView();
+		plotSurfView = new PlotSurfaceView();
 	}
 }
