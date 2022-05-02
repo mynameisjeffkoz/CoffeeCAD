@@ -29,7 +29,7 @@ public class CurveMakerView extends BorderPane {
 	private static final String OPTION_1 = "Point-Driven Spline";
 	private static final String OPTION_2 = "B-Spline Curve";
 	private static final int MIN_CONTROL_POINTS = 2;
-	private static final int MAX_CONTROL_POINTS = 4;
+	private static final int MAX_CONTROL_POINTS = Integer.MAX_VALUE;
 
 	public CurveMakerView() {
 		super();
@@ -95,7 +95,9 @@ public class CurveMakerView extends BorderPane {
 	}
 
 	private GridPane bSplinePane(int numPoints) {
-		return null;
+		bSplineView = new bSplineCurveView(numPoints);
+		return bSplineView;
+		
 	}
 
 	private void initLowerGrid() {
