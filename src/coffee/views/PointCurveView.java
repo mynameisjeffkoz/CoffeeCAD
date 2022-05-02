@@ -10,7 +10,7 @@ import javafx.scene.layout.GridPane;
 
 public class PointCurveView extends GridPane {
 
-	private int numPoints;
+	protected int numPoints;
 	private ArrayList<NumberTextField> points;
 
 	public PointCurveView(int numPoints) {
