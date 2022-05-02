@@ -7,12 +7,9 @@ import java.io.IOException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ComboBoxBase;
@@ -113,34 +110,36 @@ public class CurveMakerView extends BorderPane {
 	private void addControlButtons() {
 		Button saveButton = new Button("Save");
 		Button updateButton = new Button("Update");
-		Button clearButton = new Button("Clear");
 		saveButton.setMinWidth(updateButton.getWidth());
 		saveButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				CurveMakerView parent = (CurveMakerView) ((Node) event.getSource()).getParent().getParent();
-				PointCurveView view = (PointCurveView) parent.getChildren().get(2);
-				FileChooser fileChooser = new FileChooser();
-				fileChooser.setTitle("Save");
-				fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Text Files", "*.txt"));
-				fileChooser.setInitialDirectory(new File("."));
-				try {
-					FileWriter writer = new FileWriter(fileChooser.showSaveDialog(parent.getScene().getWindow()).toString());
-					writer.write(view.toString());
-					writer.close();
-				} catch (IOException e) {
-					// No code to execute on failure
-				}
+				saveHandler();
 			}
 		});
-		clearButton.setMinWidth(updateButton.getWidth());
 		updateButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				CurveMakerView parent = (CurveMakerView) ((Node) event.getSource()).getParent().getParent();
-				selectCurveStyle(parent.readSelectorBox(), parent.readSpinner());
+				selectCurveStyle(readSelectorBox(), readSpinner());
 			}
 		});
-		lowerGrid.addRow(0, saveButton, updateButton, clearButton);
+		lowerGrid.addRow(0, saveButton, updateButton);
+	}
+	
+	private void saveHandler() {
+		PointCurveView view = (PointCurveView) getChildren().get(2);
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Save");
+		fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Text Files", "*.txt"));
+		File file = new File("./Curves/");
+		file.mkdir();
+		fileChooser.setInitialDirectory(file);
+		try {
+			FileWriter writer = new FileWriter(fileChooser.showSaveDialog(getScene().getWindow()).toString());
+			writer.write(view.toString());
+			writer.close();
+		} catch (IOException e) {
+			// No code to execute on failure
+		}
 	}
 }
