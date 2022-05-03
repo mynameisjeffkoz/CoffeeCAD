@@ -35,8 +35,9 @@ public class PlotCurveView extends GridPane {
 	private static final String OPTION_1 = "Point-Driven Spline";
 	private static final String OPTION_2 = "B-Spline Curve";
 
-	public PlotCurveView() {
+	public PlotCurveView(MatlabEngine engine) {
 		super();
+		this.engine = engine;
 		initGrid();
 		initButtons();
 		add(comboBox, 0, 0);
@@ -46,11 +47,6 @@ public class PlotCurveView extends GridPane {
 	}
 
 	private void initGrid() {
-		try {
-			engine = MatlabEngine.startMatlab();
-		} catch (EngineException | IllegalArgumentException | IllegalStateException | InterruptedException e) {
-			e.printStackTrace();
-		}
 		setAlignment(Pos.CENTER);
 		setPadding(new Insets(20, 0, 20, 0));
 		setVgap(10);
@@ -81,10 +77,10 @@ public class PlotCurveView extends GridPane {
 		});
 		this.loadButton = loadButton;
 	}
-	
+
 	private void initPlotButton() {
 		plotButton = new Button("Plot");
-		plotButton.setOnAction(new EventHandler<ActionEvent> () {
+		plotButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				plotHandler();
 			}
@@ -107,17 +103,33 @@ public class PlotCurveView extends GridPane {
 		}
 		dataLabel.setText(data);
 	}
-	
+
 	private void plotHandler() {
+		Scanner scnr = new Scanner(data);
+		int numPoints = scnr.nextInt();
+		scnr.nextLine();
+		String dataPoints = "";
+		while (scnr.hasNextLine()) {
+			dataPoints += scnr.nextLine();
+			if (scnr.hasNextLine())
+				dataPoints += System.lineSeparator();
+		}
+		scnr.close();
+		StringWriter writer = new StringWriter();
 		try {
-			StringWriter writer = new StringWriter();
-			engine.eval("x = " + data, writer, null);
-			engine.eval("plot3dmat(x)");
+			engine.eval("x = " + dataPoints + "", writer, null);
+			if (numPoints == 2)
+				engine.eval("plot3dmat(x);");
+			if (numPoints == 3)
+				engine.eval("QsplineFunc(x);");
+			if (numPoints == 4)
+				engine.eval("CsplineFunc(x);");
 			System.out.println(writer.toString());
 		} catch (CancellationException | InterruptedException | ExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 	}
 
 }
