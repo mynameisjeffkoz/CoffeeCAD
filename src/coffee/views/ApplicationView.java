@@ -2,6 +2,9 @@ package coffee.views;
 
 import java.util.HashMap;
 
+import com.mathworks.engine.EngineException;
+import com.mathworks.engine.MatlabEngine;
+
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -13,6 +16,7 @@ import javafx.scene.layout.BorderPane;
 
 public class ApplicationView extends BorderPane {
 
+	private MatlabEngine engine;
 	private MenuBar menuBar;
 	private HashMap<String, MenuItem> menuMap;
 	private CurveMakerView curvView;
@@ -112,9 +116,15 @@ public class ApplicationView extends BorderPane {
 	}
 	
 	private void initViews() {
+		try {
+			engine = MatlabEngine.startMatlab();
+		} catch (EngineException | IllegalArgumentException | IllegalStateException | InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		curvView = new CurveMakerView();
 		surfView = new SurfaceMakerView();
-		plotCurvView = new PlotCurveView();
-		plotSurfView = new PlotSurfaceView();
+		plotCurvView = new PlotCurveView(engine);
+		plotSurfView = new PlotSurfaceView(engine);
 	}
 }
