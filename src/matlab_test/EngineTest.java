@@ -17,6 +17,7 @@ public class EngineTest {
 		Scanner stdio = new Scanner(System.in);
 		stdio.nextLine();
 		matEng.close();
+		stdio.close();
 	}
 
 }

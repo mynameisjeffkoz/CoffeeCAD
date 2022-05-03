@@ -138,6 +138,7 @@ public class CurveMakerView extends BorderPane {
 		fileChooser.setInitialDirectory(file);
 		try {
 			FileWriter writer = new FileWriter(fileChooser.showSaveDialog(getScene().getWindow()).toString());
+			writer.write(readSpinner() + System.lineSeparator());
 			writer.write(view.toString());
 			writer.close();
 		} catch (IOException e) {

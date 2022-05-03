@@ -63,7 +63,7 @@ public class ApplicationView extends BorderPane {
 				Platform.exit();
 			}
 		});
-		menu.getItems().addAll(open, save, exit);
+		menu.getItems().addAll(exit);
 		
 		menuMap.put(MENU_ITEM_OPEN, open);
 		menuMap.put(MENU_ITEM_SAVE, save);

@@ -16,9 +16,9 @@ public class SurfaceMakerView extends BorderPane {
 	private GridPane upperGrid;
 	private ComboBox<String> comboBox;
 	private RevolveMakerView revolveMakeView;
-	private LoftMakerView loftMakeView;
+	private RuleMakerView RuleMakeView;
 	public static final String OPTION_1 = "Revolved Surface";
-	public static final String OPTION_2 = "Lofted Surface"; 
+	public static final String OPTION_2 = "Ruled Surface"; 
 
 	public SurfaceMakerView() {
 		super();
@@ -52,7 +52,7 @@ public class SurfaceMakerView extends BorderPane {
 	
 	private void initViews() {
 		revolveMakeView = new RevolveMakerView();
-		loftMakeView = new LoftMakerView();
+		RuleMakeView = new RuleMakerView();
 	}
 	
 	private void loadView() {
@@ -61,6 +61,6 @@ public class SurfaceMakerView extends BorderPane {
 		if (comboBox.getValue().equals(OPTION_1))
 			setCenter(revolveMakeView);
 		if (comboBox.getValue().equals(OPTION_2))
-			setCenter(loftMakeView);
+			setCenter(RuleMakeView);
 	}
 }

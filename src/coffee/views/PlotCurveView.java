@@ -20,6 +20,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -105,6 +107,13 @@ public class PlotCurveView extends GridPane {
 	}
 
 	private void plotHandler() {
+		if (comboBox.getValue().equals(OPTION_1))
+			plotSpline();
+		if (comboBox.getValue().equals(OPTION_2))
+			plotBSpline();
+	}
+	
+	private void plotSpline() {
 		Scanner scnr = new Scanner(data);
 		int numPoints = scnr.nextInt();
 		scnr.nextLine();
@@ -119,17 +128,52 @@ public class PlotCurveView extends GridPane {
 		try {
 			engine.eval("x = " + dataPoints + "", writer, null);
 			if (numPoints == 2)
-				engine.eval("plot3dmat(x);");
-			if (numPoints == 3)
+				engine.eval("LsplineFunc(x);");
+			else if (numPoints == 3)
 				engine.eval("QsplineFunc(x);");
-			if (numPoints == 4)
+			else if (numPoints == 4)
 				engine.eval("CsplineFunc(x);");
+			else {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("ERROR");
+				alert.setHeaderText("Size not permitted");
+				alert.setContentText("This application currently supports only linear, quadratic, and cubic Splines");
+				alert.showAndWait();
+			}
 			System.out.println(writer.toString());
 		} catch (CancellationException | InterruptedException | ExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+	}
+	
+	private void plotBSpline() {
+		Scanner scnr = new Scanner(data);
+		int numPoints = scnr.nextInt();
+		scnr.nextLine();
+		int degree = scnr.nextInt();
+		scnr.nextLine();
+		String dataPoints = "";
+		while (scnr.hasNextLine()) {
+			dataPoints += scnr.nextLine();
+			if (scnr.hasNextLine())
+				dataPoints += System.lineSeparator();
+		}
+		scnr.close();
+		StringWriter writer = new StringWriter();
+		try {
+			engine.eval("x = " + dataPoints + "", writer, null);
+			if (degree == 2) {
+				engine.eval("Q_Bspline(x)");
+			}
+			if (degree == 3) {
+				engine.eval("C_Bspline(x)");
+			}
+			System.out.println(writer.toString());
+		} catch (CancellationException | InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
